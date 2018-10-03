@@ -57,10 +57,12 @@ public class QuestionActivity extends AppCompatActivity {
         answerBtn3 = (Button)findViewById(R.id.answerBtn3);
         answerBtn4 = (Button)findViewById(R.id.answerBtn4);
 
-        //create quizArray from quizData
 
-            //Prepare Array
+
+
+        //create quizArray from quizData
         for (int i=0; i<quizData.length; i++){
+            //Prepare Array
             ArrayList<String> tmpArray = new ArrayList<>();
             tmpArray.add(quizData[i][0]); //Question
             tmpArray.add(quizData[i][1]); //Right Answer

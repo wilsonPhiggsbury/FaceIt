@@ -15,12 +15,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Called when the user taps the Send button */
-    public void startGame(View view) {
-        // Do something in response to button
-        Intent intent = new Intent(this, InstructionPage.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+    public void startQuiz(View view) {
+        Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
         startActivity(intent);
     }
 }
