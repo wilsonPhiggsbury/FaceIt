@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,14 +28,19 @@ public class QuestionActivity extends AppCompatActivity {
     private int rightAnswerCount = 0;
     private int quizCount = 1;
 
-    static final private int QUIZ_COUNT = 10; //number of times the quiz is taken before showing the results
+    static final int ANSWERS = 4;
+
+    static final private int QUIZ_COUNT = 3; //number of times the quiz is taken before showing the results
 
     ArrayList<ArrayList<String>> quizArray = new ArrayList<>();
 
     String quizData[][] = {
-            // {"Question","Right Answer", "Choice 1", "Choice 2", "Choice 3", "Choice 4"}
+            // {"Question","Right Answer", "Choice 1", "Choice 2", "Choice 3"}
             {"Who is this in the photo?","Ten","Eight","Nine","Eleven"},
             {"Who is this in the photo?","Eight","Seven","Ten","Twelve"},
+            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
+            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
+            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
             {"Who is this in the photo?","Ten","Six","Five","Eleven"},
             {"Who is this in the photo?","Eleven","Thirteen","Two","Ten"}
     };
@@ -51,22 +57,25 @@ public class QuestionActivity extends AppCompatActivity {
         answerBtn3 = (Button)findViewById(R.id.answerBtn3);
         answerBtn4 = (Button)findViewById(R.id.answerBtn4);
 
-        //create quizArray from quiaData
-        for (int i=0; i<quizData.length; i++){
+        //create quizArray from quizData
+
             //Prepare Array
+        for (int i=0; i<quizData.length; i++){
             ArrayList<String> tmpArray = new ArrayList<>();
             tmpArray.add(quizData[i][0]); //Question
             tmpArray.add(quizData[i][1]); //Right Answer
             tmpArray.add(quizData[i][2]); //Choice 1
             tmpArray.add(quizData[i][3]); //choice 2
             tmpArray.add(quizData[i][4]); //Choice 3
+            quizArray.add(tmpArray);
         }
         showNextQuiz();
     }
 
     public void showNextQuiz(){
         //update quizCountLabel
-        countLabel.setText("Q" + quizCount);
+        String quizCountLabel = "Q" + quizCount;
+        countLabel.setText(quizCountLabel);
 
         //Generate random number between 0 and 3
         Random random = new Random();
@@ -79,17 +88,19 @@ public class QuestionActivity extends AppCompatActivity {
         questionLabel.setText(quiz.get(0));
         rightAnswer = quiz.get(1);
 
-        //Remove the question from quiz and shuffle choices
-        quiz.remove(0);
-        Collections.shuffle(quiz);
-
+        Log.i("quiz length:", Integer.toString( quiz.size()));
+        Log.i("quiz content:", quiz.toString());
         //Set choices
-        answerBtn1.setText(quiz.get(0));
-        answerBtn2.setText(quiz.get(1));
-        answerBtn3.setText(quiz.get(2));
-        answerBtn4.setText(quiz.get(3));
-
-
+        ArrayList<Integer> shuffledIndex = new ArrayList<>(3);
+        for(int i=0; i<ANSWERS; i++)
+        {
+            shuffledIndex.add(i+1);
+        }
+        Collections.shuffle(shuffledIndex);
+        answerBtn1.setText(quiz.get(shuffledIndex.get(0)));
+        answerBtn2.setText(quiz.get(shuffledIndex.get(1)));
+        answerBtn3.setText(quiz.get(shuffledIndex.get(2)));
+        answerBtn4.setText(quiz.get(shuffledIndex.get(3)));
     }
 
     public void checkAnswer(View view){
