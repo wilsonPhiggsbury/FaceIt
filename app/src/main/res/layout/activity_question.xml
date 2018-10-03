@@ -1,93 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QuestionActivity"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".QuestionActivity">
 
     <TextView
         android:id="@+id/countLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Q1"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/questionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="Question"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countLabel" />
-
     <Button
         android:id="@+id/answerBtn1"
-        android:layout_width="@dimen/answerBtn_width"
-        android:layout_height="@dimen/answerBtn_height"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:onClick="checkAnswer"
         android:text="answer1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintBottom_toTopOf="@+id/answerBtn3"
+        app:layout_constraintEnd_toStartOf="@+id/answerBtn2"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="270dp"
-        android:onClick="checkAnswer"/>
+        app:layout_constraintTop_toBottomOf="@+id/faceImg" />
 
 
     <Button
         android:id="@+id/answerBtn2"
-        android:layout_width="@dimen/answerBtn_width"
-        android:layout_height="@dimen/answerBtn_height"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
+        android:onClick="checkAnswer"
         android:text="answer2"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/answerBtn4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.60"
-        android:onClick="checkAnswer"/>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/answerBtn1"
+        app:layout_constraintTop_toBottomOf="@+id/faceImg" />
 
     <Button
         android:id="@+id/answerBtn3"
-        android:layout_width="@dimen/answerBtn_width"
-        android:layout_height="@dimen/answerBtn_height"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="8dp"
+        android:onClick="checkAnswer"
         android:text="answer3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/answerBtn4"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75"
-        android:onClick="checkAnswer"/>
+        app:layout_constraintTop_toBottomOf="@+id/answerBtn1" />
 
     <Button
         android:id="@+id/answerBtn4"
-        android:layout_width="@dimen/answerBtn_width"
-        android:layout_height="@dimen/answerBtn_height"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:onClick="checkAnswer"
         android:text="answer4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/answerBtn3"
+        app:layout_constraintTop_toBottomOf="@+id/answerBtn2" />
+
+    <ImageView
+        android:id="@+id/faceImg"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.90"
-        android:onClick="checkAnswer"/>
-</android.support.constraint.ConstraintLayout >
+        app:srcCompat="@drawable/faceit" />
+</android.support.constraint.ConstraintLayout>
