@@ -15,10 +15,11 @@ import java.util.Collections;
 import java.util.Random;
 
 import javax.xml.transform.Result;
+import android.*;
 
 public class QuestionActivity extends AppCompatActivity {
     private TextView countLabel;
-    private TextView questionLabel;
+//    private TextView questionLabel;
     private Button answerBtn1;
     private Button answerBtn2;
     private Button answerBtn3;
@@ -87,7 +88,6 @@ public class QuestionActivity extends AppCompatActivity {
         ArrayList<String> quiz = quizArray.get(randomNum);
 
         //Set question and right answer
-        questionLabel.setText(quiz.get(0));
         rightAnswer = quiz.get(1);
 
         Log.i("quiz length:", Integer.toString( quiz.size()));

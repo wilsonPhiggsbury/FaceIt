@@ -13,25 +13,24 @@
         android:id="@+id/faceImg"
         android:layout_width="256dp"
         android:layout_height="139dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/resultActivityCap" />
+        app:srcCompat="@drawable/resultactivitycap" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
         android:text="You have done the quiz!\n\nYour result:"
         android:textAlignment="center"
         android:textColor="#F0EEB1"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/faceImg" />
 
@@ -39,7 +38,7 @@
         android:id="@+id/resultLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:text="3 / 5"
         android:textColor="#F0EEB1"
         android:textSize="60sp"
@@ -51,8 +50,6 @@
         android:id="@+id/totalScoreLabel"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"
         android:text="Total Score : 33"
         android:textColor="#F0EEB1"
         android:textSize="28sp"
@@ -60,20 +57,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultLabel"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.463" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/appCompatButton"
         android:layout_width="@dimen/defaultBtn_width"
         android:layout_height="@dimen/defaultBtn_height"
+        android:layout_marginBottom="92dp"
         android:background="@drawable/bg_button"
         android:onClick="returnTop"
         android:text="return"
         android:textColor="@android:color/black"
         android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="490dp" />
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
