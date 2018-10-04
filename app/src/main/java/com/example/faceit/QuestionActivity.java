@@ -58,9 +58,6 @@ public class QuestionActivity extends AppCompatActivity {
         answerBtn3 = (Button)findViewById(R.id.answerBtn3);
         answerBtn4 = (Button)findViewById(R.id.answerBtn4);
 
-
-
-
         //create quizArray from quizData
         for (int i=0; i<quizData.length; i++){
             //Prepare Array
