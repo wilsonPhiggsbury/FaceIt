@@ -34,7 +34,7 @@ public class ResultActivity extends AppCompatActivity {
         editor.commit();
     }
     public void returnTop(View view){
-        Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
 }

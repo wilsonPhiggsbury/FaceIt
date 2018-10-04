@@ -51,7 +51,7 @@ public class QuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question);
 
         countLabel = (TextView)findViewById(R.id.countLabel);
-        questionLabel = (TextView)findViewById(R.id.questionLabel);
+//        questionLabel = (TextView)findViewById(R.id.questionLabel);
         answerBtn1 = (Button)findViewById(R.id.answerBtn1);
         answerBtn2 = (Button)findViewById(R.id.answerBtn2);
         answerBtn3 = (Button)findViewById(R.id.answerBtn3);

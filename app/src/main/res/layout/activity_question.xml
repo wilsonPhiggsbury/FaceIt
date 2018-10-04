@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".QuestionActivity">
+    tools:context=".QuestionActivity"
+    android:background="@color/colorPrimaryDark">
 
     <TextView
         android:id="@+id/countLabel"
@@ -49,8 +50,6 @@
 
     <Button
         android:id="@+id/answerBtn3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:onClick="checkAnswer"

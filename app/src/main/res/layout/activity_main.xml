@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,43 +15,54 @@
         android:layout_height="320dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="72dp"
-        android:layout_marginEnd="8dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cartoon_cover_unedit" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to\n Face Recognition Quiz\n  FaceIt !"
-        android:textSize="28sp"
-        android:layout_marginTop="10dp"
-        android:textColor="#F0EEB1"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="serif"
         android:shadowColor="#4B4A1E"
-        android:fontFamily="serif"/>
+        android:text="Welcome to\n Face Recognition Quiz\n  FaceIt !"
+        android:textColor="#F0EEB1"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/edit_message"
         android:inputType="textPersonName"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
-        android:layout_width="@dimen/answerBtn_width"
-        android:layout_height="@dimen/answerBtn_height"
-        android:text="@string/button_startgame"
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="@dimen/defaultBtn_width"
+        android:layout_height="@dimen/defaultBtn_height"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_button"
         android:onClick="startQuiz"
-        android:layout_marginTop="10dp"/>
+        android:text="@string/button_startgame"
+        android:textColor="@android:color/black"
+        android:textSize="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
