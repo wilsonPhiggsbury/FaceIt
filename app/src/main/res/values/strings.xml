@@ -3,4 +3,6 @@
     <string name="start_game">Start the game</string>
     <string name="edit_message">Enter guardian mode (Passcode:0000)</string>
     <string name="button_startgame">Start Game</string>
+    <string name="question_bank">Question Bank JSON</string>
+    <string name="internal_img_ext">.jpg</string>
 </resources>
