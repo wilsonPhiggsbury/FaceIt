@@ -18,9 +18,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.security.Timestamp;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
+    private JSONObject questionBankJSON;
     private static final int RESULT_LOAD_IMAGE = 1; //id for the image selected to upload
     private Button browseImageBtn;
     private Button uploadPhotoBtn;
@@ -31,6 +36,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        try {
+            questionBankJSON = Persistent.readJSONFromStorage(getApplicationContext());
+            //questionBankJSON.put(Long.toHexString(new Date().getTime()), "Hi");
+            //Persistent.writeJSONToStorage(getApplicationContext(), questionBankJSON);
+        } catch (JSONException e) {
+            Log.e("JSON Exception!", "JSON conversion from string fail");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("IO Exception!", "IO for read fail");
+            e.printStackTrace();
+        }
         image = (ImageView)findViewById(R.id.imageToUpload);
         browseImageBtn = (Button)findViewById(R.id.browseImageBtn);
         uploadPhotoBtn = (Button)findViewById(R.id.uploadImageBtn);
