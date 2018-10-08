@@ -61,27 +61,29 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         image.setOnClickListener((View.OnClickListener) this);
         uploadPhotoBtn.setOnClickListener((View.OnClickListener) this);
         browseImageBtn.setOnClickListener((View.OnClickListener)this);
+
+        requestPermission();
     }
 
     @Override
     public void onClick(View view){
         switch(view.getId()) {
             case R.id.browseImageBtn:
-                requestPermission();
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
                 break;
 
             case R.id.uploadImageBtn:
-                DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-                String imgFileName = "dummy.jpg";//dateFormat.format(new Date()) + getString(R.string.internal_img_ext);
+                DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+                String imgFileName = dateFormat.format(new Date()) + ".jpg";
+
                 try {
                     if(imageToUpload == null)
-                        Log.e("E","just read null");
+                        Log.e("FaceIt Guardian Mode","Attempting to store NULL image!");
                     else
                         Persistent.saveImageToStorage(getFilesDir(), imgFileName, imageToUpload);
-                    Log.d("Image", "uploading image using filename "+imgFileName);
-                } catch (FileNotFoundException e) {
+                    Log.d("FaceIt Guardian Mode", "Inserting image using filename "+imgFileName);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -144,9 +146,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //                    grantResult[0] means it will check for the first postion permission which is READ_EXTERNAL_STORAGE
                     //                    grantResult[1] means it will check for the Second postion permission which is CAMERA
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                    Log.d("FaceIt Guardian Mode","Storage permissions Granted.");
                 } else
-                    Toast.makeText(this, "Permission not Granted", Toast.LENGTH_SHORT).show();
+                {
+                    Log.d("FaceIt Guardian Mode","Storage permissions Rejected!");
+                    Toast.makeText(this, "Please allow access to the gallery.", Toast.LENGTH_SHORT).show();
+                    this.finish();
+                }
                 return;
             }
 

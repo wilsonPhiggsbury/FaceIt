@@ -45,8 +45,9 @@ public final class Persistent {
         questionBankWriter.close();
         Log.d("Written JSON :",json.toString());
     }
-    public static void saveImageToStorage(File path, String fileName, Bitmap imageToSave) throws FileNotFoundException {
+    public static void saveImageToStorage(File path, String fileName, Bitmap imageToSave) throws IOException {
         FileOutputStream out = new FileOutputStream(new File(path, fileName));
         imageToSave.compress(Bitmap.CompressFormat.PNG, 100, out);
+        out.close();
     }
 }

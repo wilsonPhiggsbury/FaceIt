@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 public final class Question {
@@ -22,11 +23,14 @@ public final class Question {
     }
     private Bitmap loadImageFromStorage(File path, String fileName)
     {
+        File f = new File(path, fileName);
         try {
-            File f = new File(path, fileName);
-            return BitmapFactory.decodeStream(new FileInputStream(f));
+            FileInputStream in = new FileInputStream(f);
+            Bitmap face = BitmapFactory.decodeStream(in);
+            in.close();
+            return face;
         }
-        catch (FileNotFoundException e)
+        catch (IOException e)
         {
             Log.e("Bitmap error","Bitmap for "+fileName+" could not be loaded!");
             return null;
