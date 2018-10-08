@@ -1,12 +1,16 @@
 package com.example.faceit;
 
+import android.Manifest;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,10 +18,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
+    private JSONObject questionBankJSON;
     private static final int RESULT_LOAD_IMAGE = 1; //id for the image selected to upload
     private Button browseImageBtn;
     private Button uploadPhotoBtn;
@@ -28,6 +42,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        try {
+            questionBankJSON = Persistent.readJSONFromStorage(getApplicationContext());
+            //questionBankJSON.put(Long.toHexString(new Date().getTime()), "Hi");
+            //Persistent.writeJSONToStorage(getApplicationContext(), questionBankJSON);
+        } catch (JSONException e) {
+            Log.e("JSON Exception!", "JSON conversion from string fail");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("IO Exception!", "IO for read fail");
+            e.printStackTrace();
+        }
         image = (ImageView)findViewById(R.id.imageToUpload);
         browseImageBtn = (Button)findViewById(R.id.browseImageBtn);
         uploadPhotoBtn = (Button)findViewById(R.id.uploadImageBtn);
@@ -42,12 +67,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view){
         switch(view.getId()) {
             case R.id.browseImageBtn:
+                requestPermission();
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
                 break;
 
             case R.id.uploadImageBtn:
-                uploadImageToInternalStorage(imageToUpload);
+                DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                String imgFileName = "dummy.jpg";//dateFormat.format(new Date()) + getString(R.string.internal_img_ext);
+                try {
+                    if(imageToUpload == null)
+                        Log.e("E","just read null");
+                    else
+                        Persistent.saveImageToStorage(getFilesDir(), imgFileName, imageToUpload);
+                    Log.d("Image", "uploading image using filename "+imgFileName);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
@@ -80,20 +116,41 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             //set the photo to a bitmap
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap imageToUpload = BitmapFactory.decodeFile(imagePath, options);
 
-            //upload the bitmap
-            uploadImageToInternalStorage(imageToUpload);
-
+            imageToUpload = BitmapFactory.decodeFile(imagePath, options);
+            if(imageToUpload == null)
+                Log.e("E","just inserted null from path "+imagePath);
             // At the end remember to close the cursor or you will end with the RuntimeException!
             cursor.close();
-            Log.i("Image", "uploading image...");
 
         }
     }
 
-    private void uploadImageToInternalStorage(Bitmap bitmapImage){
-        //insert code here
+    private void requestPermission(){
+        boolean granted = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED;
+        if(!granted)
+        {
+            ActivityCompat.requestPermissions(SettingsActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //                    grantResult[0] means it will check for the first postion permission which is READ_EXTERNAL_STORAGE
+                    //                    grantResult[1] means it will check for the Second postion permission which is CAMERA
+                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(this, "Permission not Granted", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        }
 
     }
 }
