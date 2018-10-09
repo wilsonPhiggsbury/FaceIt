@@ -5,4 +5,8 @@
     <string name="button_startgame">Start Game</string>
     <string name="question_bank">Question Bank JSON</string>
     <string name="internal_img_ext">.jpg</string>
+    <string name="not_enough_questions">You need at least 4 questions to play.</string>
+    <string name="confirm_wipe">Confirm to wipe question bank?</string>
+    <string name="OK">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

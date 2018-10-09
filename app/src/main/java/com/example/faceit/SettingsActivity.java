@@ -42,17 +42,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        try {
-            questionBankJSON = Persistent.readJSONFromStorage(getApplicationContext());
-            //questionBankJSON.put(Long.toHexString(new Date().getTime()), "Hi");
-            //Persistent.writeJSONToStorage(getApplicationContext(), questionBankJSON);
-        } catch (JSONException e) {
-            Log.e("JSON Exception!", "JSON conversion from string fail");
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.e("IO Exception!", "IO for read fail");
-            e.printStackTrace();
-        }
+
         image = (ImageView)findViewById(R.id.imageToUpload);
         browseImageBtn = (Button)findViewById(R.id.browseImageBtn);
         uploadPhotoBtn = (Button)findViewById(R.id.uploadImageBtn);
@@ -75,15 +65,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.uploadImageBtn:
                 DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
-                String imgFileName = dateFormat.format(new Date()) + ".jpg";
+                String imgFileName = dateFormat.format(new Date());
 
                 try {
                     if(imageToUpload == null)
                         Log.e("FaceIt Guardian Mode","Attempting to store NULL image!");
+                    else if(editPhotoName.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(), "Please input name of person in photo!",Toast.LENGTH_LONG).show();
+                    }
                     else
-                        Persistent.saveImageToStorage(getFilesDir(), imgFileName, imageToUpload);
-                    Log.d("FaceIt Guardian Mode", "Inserting image using filename "+imgFileName);
+                    {
+                        Persistent.saveImageToStorage(imgFileName, imageToUpload);
+                        Persistent.saveEntryToStorage(imgFileName, editPhotoName.getText().toString(), null);
+                    }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -121,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             imageToUpload = BitmapFactory.decodeFile(imagePath, options);
             if(imageToUpload == null)
-                Log.e("E","just inserted null from path "+imagePath);
+                Log.e("FaceIt Guardian Mode","Image just returned null from path "+imagePath);
             // At the end remember to close the cursor or you will end with the RuntimeException!
             cursor.close();
 

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -17,15 +19,17 @@ import java.util.Random;
 import javax.xml.transform.Result;
 import android.*;
 
+import org.json.JSONException;
+
 public class QuestionActivity extends AppCompatActivity {
     private TextView countLabel;
 //    private TextView questionLabel;
-    private Button answerBtn1;
-    private Button answerBtn2;
-    private Button answerBtn3;
-    private Button answerBtn4;
+    private Button[] answerBtns = new Button[4];
+    private ImageView faceImg;
 
-    private String rightAnswer;
+    private int correctSlotNumber;
+    private int questionNumber;
+
     private int rightAnswerCount = 0;
     private int quizCount = 1;
 
@@ -33,83 +37,95 @@ public class QuestionActivity extends AppCompatActivity {
 
     static final private int QUIZ_COUNT = 3; //number of times the quiz is taken before showing the results
 
-    ArrayList<ArrayList<String>> quizArray = new ArrayList<>();
-
-    String quizData[][] = {
-            // {"Question","Right Answer", "Choice 1", "Choice 2", "Choice 3"}
-            {"Who is this in the photo?","Ten","Eight","Nine","Eleven"},
-            {"Who is this in the photo?","Eight","Seven","Ten","Twelve"},
-            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
-            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
-            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
-            {"Who is this in the photo?","Ten","Six","Five","Eleven"},
-            {"Who is this in the photo?","Eleven","Thirteen","Two","Ten"}
-    };
+    ArrayList<Question> quizArray;
+    ArrayList<Integer> quizIndexOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
+
         countLabel = (TextView)findViewById(R.id.countLabel);
+        faceImg = (ImageView)findViewById(R.id.faceImg);
 //        questionLabel = (TextView)findViewById(R.id.questionLabel);
-        answerBtn1 = (Button)findViewById(R.id.answerBtn1);
-        answerBtn2 = (Button)findViewById(R.id.answerBtn2);
-        answerBtn3 = (Button)findViewById(R.id.answerBtn3);
-        answerBtn4 = (Button)findViewById(R.id.answerBtn4);
-
-        //create quizArray from quizData
-        for (int i=0; i<quizData.length; i++){
-            //Prepare Array
-            ArrayList<String> tmpArray = new ArrayList<>();
-            tmpArray.add(quizData[i][0]); //Question
-            tmpArray.add(quizData[i][1]); //Right Answer
-            tmpArray.add(quizData[i][2]); //Choice 1
-            tmpArray.add(quizData[i][3]); //choice 2
-            tmpArray.add(quizData[i][4]); //Choice 3
-            quizArray.add(tmpArray);
-        }
-        showNextQuiz();
+        answerBtns[0] = (Button)findViewById(R.id.answerBtn1);
+        answerBtns[1] = (Button)findViewById(R.id.answerBtn2);
+        answerBtns[2] = (Button)findViewById(R.id.answerBtn3);
+        answerBtns[3] = (Button)findViewById(R.id.answerBtn4);
+        resetQuiz();
     }
+    private  void resetQuiz()
+    {
+        try {
+            quizArray = Persistent.loadEntriesFromStorage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(quizArray.size() < 4)
+        {
+            Log.e("FaceIt Game Mode","Too few questions!");
+            AlertDialog.Builder builder = new AlertDialog.Builder(QuestionActivity.this);
+            builder.setMessage(R.string.not_enough_questions);
+            builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            Log.d("FaceIt Game Mode","Number of questions is "+quizArray.size());
+            showNextQuiz();
+        }
 
+    }
     public void showNextQuiz(){
+        // populate quiz indexes
+        quizIndexOrder = new ArrayList<>();
+        for(int i=0; i<quizArray.size(); i++)
+        {
+            quizIndexOrder.add(i);
+            Log.d("FaceIt Game Mode","Question "+i+" is "+quizArray.get(i).toString());
+        }
+        Collections.shuffle(quizIndexOrder);
         //update quizCountLabel
         String quizCountLabel = "Q" + quizCount;
         countLabel.setText(quizCountLabel);
 
         //Generate random number between 0 and 3
         Random random = new Random();
-        int randomNum = random.nextInt(quizArray.size());
-
-        //Pick one quiz set
-        ArrayList<String> quiz = quizArray.get(randomNum);
-
-        //Set question and right answer
-        rightAnswer = quiz.get(1);
-
-        Log.i("quiz length:", Integer.toString( quiz.size()));
-        Log.i("quiz content:", quiz.toString());
-        //Set choices
-        ArrayList<Integer> shuffledIndex = new ArrayList<>(3);
-        for(int i=0; i<ANSWERS; i++)
+        int randomNum = random.nextInt(quizIndexOrder.size());
+        //Pick one quiz question by index
+        questionNumber = quizIndexOrder.remove(randomNum);
+        //Paste answer into random slot
+        correctSlotNumber = random.nextInt(4);
+        Question currentQuestion = quizArray.get(questionNumber);
+        answerBtns[correctSlotNumber].setText(currentQuestion.getName());
+        currentQuestion.putImageTo(faceImg);
+        // Pick other options from other questions & set choices *may RE-SELECT same other question*
+        for(int i=0; i<4; i++)
         {
-            shuffledIndex.add(i+1);
+            if(i==correctSlotNumber)
+                continue;
+            do {
+                randomNum = random.nextInt(quizArray.size());
+            }while(randomNum == questionNumber);
+            answerBtns[i].setText(quizArray.get(randomNum).getName());
         }
-        Collections.shuffle(shuffledIndex);
-        answerBtn1.setText(quiz.get(shuffledIndex.get(0)));
-        answerBtn2.setText(quiz.get(shuffledIndex.get(1)));
-        answerBtn3.setText(quiz.get(shuffledIndex.get(2)));
-        answerBtn4.setText(quiz.get(shuffledIndex.get(3)));
     }
 
     public void checkAnswer(View view){
         //get pushed button
-        Button answerBtn = (Button)findViewById(view.getId());
-        String btnText = answerBtn.getText().toString();
-
         String alertTitle;
-
-        if(btnText.equals(rightAnswer)){
+        Button answerBtn = (Button)findViewById(view.getId());
+        if(answerBtn.equals(answerBtns[correctSlotNumber]))
+        {
             //Correct!
             alertTitle = "Correct!";
             rightAnswerCount++;
@@ -123,7 +139,7 @@ public class QuestionActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(alertTitle);
-        builder.setMessage("Answer: " + rightAnswer);
+        builder.setMessage("Answer: " + quizArray.get(questionNumber).getName());
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -132,6 +148,7 @@ public class QuestionActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
                     intent.putExtra("RIGHT_ANSWER_COUNT", rightAnswerCount);
                     startActivity(intent);
+                    resetQuiz();
                 }else{
                     quizCount++;
                     showNextQuiz();
