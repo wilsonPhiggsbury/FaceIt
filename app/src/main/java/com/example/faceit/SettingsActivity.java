@@ -78,6 +78,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     {
                         Persistent.saveImageToStorage(imgFileName, imageToUpload);
                         Persistent.saveEntryToStorage(imgFileName, editPhotoName.getText().toString(), null);
+                        Toast.makeText(getApplicationContext(), "Image uploaded!",Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
